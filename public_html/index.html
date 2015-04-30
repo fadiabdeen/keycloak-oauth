@@ -1,0 +1,101 @@
+<html ng-app='oauthTest'>
+    <head>
+        <title>OAuth 2.0 for Keycloak and test API MAN</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="http://codemirror.net/lib/codemirror.css"/>
+        <link rel="stylesheet" type="text/css" href="css/main.css"/>
+        <link rel="stylesheet" href="js/bootstrap/dist/css/bootstrap.min.css">
+        <style>
+            input {width: 600px;}
+            label {width: 150px;}
+            .tokenActions{
+                margin-left: 150px; 
+            }
+        </style>
+    </head>
+    <body ng-controller='MainController' style="margin: 20px;">
+        <div class="col-lg-6">
+            <h3>OAuth 2.0 for Keycloak and test API MAN</h3>
+            <div style="width: 50%;">
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="server">OAuth Server</label>
+                <input type="text" ng-model="server" id="server">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="server">Realm</label>
+                <input type="text" ng-model="realm" id="realm">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="client_id">Client Id</label>
+                <input type="text" ng-model="client_id" id="client_id">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="redirect_uri">Redirect URI</label>
+                <input type="text" ng-model="redirect_uri" id="redirect_uri">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="secret">Secret</label>
+                <input type="text" ng-model="secret" id="secret">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="service">Web service</label>
+                <input type="text" ng-model="service" id="service">
+                <button class='btn btn-sm' style='margin-left:3px;' ng-click="testToken()">Test</button>
+            </div>
+
+            <button class='btn btn-primary' ng-click="saveValues()">Save</button>
+            <button class='btn btn-primary' ng-click="getAuthorizationCode()">Authorization Code</button>
+            <button class='btn btn-primary' ng-click="getTokenFromCode()">Access Token</button>
+            <button class='btn btn-primary' ng-click="logout()">Logout</button>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="access_token">Access Token</label>
+                <input type="text" ng-model="access_token" id="access_token">
+                <button class='btn btn-default btn-sm' clip-copy='access_token' clip-click='copyConfirm()'>Copy</button>
+                <button class='btn btn-sm' style='margin-left:3px;' ng-click="validateToken()">Validate</button>
+                <div class='tokenActions'>
+
+                    <button class='btn btn-primary' ng-click="refreshToken()">Refresh Token</button>
+                    <button class='btn btn-primary' ng-click="revokeToken()">Revoke Token</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="authorizationCode">Authorization Code</label>
+                <input type="text" ng-model="authorizationCode" id="authorizationCode">
+            </div>
+            <div class="form-group">
+                <label for="basicKey">Basic Key</label>
+                <input type="text" ng-model="basicKey" id="basicKey">
+            </div>
+            <div class="form-group">
+                <label for="refresh_token">Refresh Token</label>
+                <input type="text" ng-model="refresh_token" id="refresh_token" class="disabled">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <!--<div ng-bind-html="testResult"></div>-->
+            <pre> {{testResult}}</pre>
+            <!--<dev ui-codemirror="cmOption" ng-model="testResult" ui-refresh='isSomething'></dev>-->
+        </div>
+
+    </body>
+
+
+
+    <script type="text/javascript" src="js/angular/angular.min.js"></script>
+    <script type="text/javascript" src="js/ngStorage.js"></script>
+    <script type="text/javascript" src="js/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="js/ZeroClipboard.min.js"></script>
+    <script type="text/javascript" src="js/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/scheme/scheme.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="js/ui-codemirror.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/ng-clip.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+</html>
