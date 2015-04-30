@@ -1,4 +1,4 @@
 keycloak-oauth
 ==============
 
-Test Keycloak OAuth 
+Test Keycloak OAuth.
