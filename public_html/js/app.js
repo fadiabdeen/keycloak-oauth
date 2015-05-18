@@ -56,7 +56,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     var getBasicKey = function () {
-        var bk = btoa('TESTOAuth:' + $scope.secret);
+        var bk = btoa($scope.client_id+':' + $scope.secret);
         $scope.basicKey = bk;
 
         return 'Basic ' + bk;
