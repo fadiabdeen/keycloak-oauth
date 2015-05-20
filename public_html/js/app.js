@@ -34,8 +34,34 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
 //    }
 //  };
 
+    var readKeycloakConfig = function (callback) {
+
+        $http.get('keycloak.json').success(function (data) {
+            callback(data);
+        });
+    };
+
+    var setDataToScope = function (config) {
+        if (!$sessionStorage.client_id)
+            $scope.client_id = config.resource;
+
+        if (!$sessionStorage.secret)
+            $scope.secret = config.credentials.secret;
+        
+        if (!$sessionStorage.server)
+            $scope.server = config['auth-server-url'];
+        
+        if (!$sessionStorage.realm)
+            $scope.realm = config.realm;
+
+    };
+
 
     var init = function () {
+
+
+        readKeycloakConfig(setDataToScope);
+
         $scope.authorizationCode = $location.absUrl().split('code=')[1];
         if ($scope.authorizationCode !== undefined) {
             //$scope.addAlert('success', 'New Authorzation Code available');
@@ -56,7 +82,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     var getBasicKey = function () {
-        var bk = btoa($scope.client_id+':' + $scope.secret);
+        var bk = btoa($scope.client_id + ':' + $scope.secret);
         $scope.basicKey = bk;
 
         return 'Basic ' + bk;
@@ -84,7 +110,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
                         'Authorization': getBasicKey(),
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }}).success(function (data) {
-            
+
             $scope.displayResult(data);
             $sessionStorage.token = data;
             $scope.access_token = $sessionStorage.token.access_token;
@@ -117,8 +143,8 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
                     .replace(jsonLine, library.json.replacer);
         }
     };
-    
-    $scope.displayResult = function(data){
+
+    $scope.displayResult = function (data) {
         $scope.testResult = JSON.stringify(data, null, 4);
 //        $scope.testResult = $sce.trustAsHtml(library.json.prettyPrint(data));
     };
