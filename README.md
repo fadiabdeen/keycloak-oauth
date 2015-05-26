@@ -1,4 +1,6 @@
 keycloak-oauth
 ==============
 
-Test Keycloak OAuth.
+git clone ... 
+bower install
+
