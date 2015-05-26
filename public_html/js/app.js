@@ -1,5 +1,5 @@
 'use strict';
-var oauthTest = angular.module('oauthTest', ['ui.bootstrap', 'ngStorage', 'ngClipboard', 'ui.codemirror']);
+var oauthTest = angular.module('oauthTest', ['ui.bootstrap', 'ngStorage', 'ngClipboard']);
 
 oauthTest.config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
