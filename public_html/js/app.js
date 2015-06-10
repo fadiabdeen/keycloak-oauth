@@ -96,7 +96,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     init();
 
     $scope.getTokenFromCode = function () {
-        var code_endpoint = $scope.server + '/realms/' + $scope.realm + '/tokens/access/codes';
+        var code_endpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/access/codes';
         var params = 'code=' + $scope.authorizationCode + '&redirect_uri=' + $scope.redirect_uri;
         if ($scope.authorizationCode === '') {
             this.addAlert('warning', 'Authorization Code not available');
@@ -174,7 +174,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
 
     $scope.refreshToken = function () {
 
-        $http.post($scope.server + '/realms/' + $scope.realm + '/tokens/refresh',
+        $http.post($scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/refresh',
                 'refresh_token=' + $scope.refresh_token,
                 {'headers': {
                         'Authorization': getBasicKey(),
@@ -205,7 +205,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     $scope.getAuthorizationCode = function () {
-        var loginEndpoint = $scope.server + '/realms/' + $scope.realm + '/tokens/login';
+        var loginEndpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/login';
 
         this.saveValues().then(function () {
             $scope.loginLink = loginEndpoint + '?client_id=' + $scope.client_id + '&redirect_uri=' + $scope.redirect_uri + '&response_type=code';
@@ -218,6 +218,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
 
     $scope.addAlert = function (type, msg) {
         $scope.alerts.push({type: type, msg: msg});
+        if($scope.alerts.length >5) $scope.closeAlert(0);
     };
 
     $scope.closeAlert = function (index) {

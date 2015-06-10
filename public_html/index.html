@@ -17,9 +17,7 @@
     <body ng-controller='MainController' style="margin: 20px;">
         <div class="col-lg-6">
             <h3>OAuth 2.0 for Keycloak and test API MAN</h3>
-            <div style="width: 50%;">
-                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-            </div>
+            
             <div class="form-group" style="margin-top: 20px;">
                 <label for="server">OAuth Server</label>
                 <input type="text" ng-model="server" id="server">
@@ -75,6 +73,9 @@
             </div>
         </div>
         <div class="col-lg-6">
+            <div style="width: 50%;">
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+            </div>
             <!--<div ng-bind-html="testResult"></div>-->
             <pre> {{testResult}}</pre>
         </div>
