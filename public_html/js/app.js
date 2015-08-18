@@ -89,8 +89,8 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     var getBearerKey = function () {
-
-        return 'Bearer ' + $scope.access_token;
+      
+        return 'Bearer ' + $sessionStorage.token.access_token;
     };
 
     init();
@@ -160,8 +160,11 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     $scope.testToken = function () {
-        var params = 'access_token=' + $scope.access_token;
-        $http.get($scope.service + '?' + params)
+        console.log("testToken");
+        //var params = '?access_token=' + $sessionStorage.token.access_token;
+        $http.get($scope.service,{'headers': {
+                        'Authorization': getBearerKey()
+                     }})
                 .success(function (data, status) {
                     $scope.addAlert('success', 'Successful service test (' + status + ')');
 
@@ -174,7 +177,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
 
     $scope.refreshToken = function () {
 
-        $http.post($scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/refresh',
+        $http.post($scope.server + '/realms/' + $scope.realm + '/tokens/refresh',
                 'refresh_token=' + $scope.refresh_token,
                 {'headers': {
                         'Authorization': getBasicKey(),
