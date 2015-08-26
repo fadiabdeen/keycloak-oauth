@@ -17,23 +17,6 @@ oauthTest.config(function ($sceDelegateProvider) {
 
 oauthTest.controller('MainController', function ($scope, $http, $sessionStorage, $sce, $location, $window, $q, AlertingService) {
 
-//    $scope.cmOption = {
-//    lineNumbers: true,
-//    indentWithTabs: true,
-//     lineWrapping : true,
-//    onLoad : function(_cm){
-// 
-//      // HACK to have the codemirror instance in the scope...
-//      $scope.modeChanged = function(){
-//        _cm.setOption("mode", "javascript");
-//      };
-//      
-//      $scope.refresh = function(){
-//          _cm.refresh();
-//      };
-//    }
-//  };
-
     var readKeycloakConfig = function (callback) {
 
         $http.get('keycloak.json').success(function (data) {
@@ -53,6 +36,9 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
         
         if (!$sessionStorage.realm)
             $scope.realm = config.realm;
+        
+        if (!$sessionStorage.redirect_uri)
+            $scope.redirect_uri = $location.absUrl();
 
     };
 
@@ -154,14 +140,22 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
         $sessionStorage.token = null;
         $window.location.href = $scope.server + '/realms/' + $scope.realm + '/tokens/logout?redirect_uri=' + $scope.redirect_uri;
     };
+    
+    $scope.clear = function () {
+        delete $sessionStorage.client_id;
+        delete $sessionStorage.redirect_uri;
+        delete $sessionStorage.secret;
+        delete $sessionStorage.server;
+        delete $sessionStorage.service;
+        delete $sessionStorage.realm;
+        console.log("Session cleared.");
+    };
 
     $scope.validateToken = function () {
         $window.open($scope.server + '/realms/' + $scope.realm + '/tokens/validate?access_token=' + $scope.access_token, '_blank');
     };
 
     $scope.testToken = function () {
-        console.log("testToken");
-        //var params = '?access_token=' + $sessionStorage.token.access_token;
         $http.get($scope.service,{'headers': {
                         'Authorization': getBearerKey()
                      }})
