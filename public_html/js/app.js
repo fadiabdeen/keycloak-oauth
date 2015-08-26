@@ -17,13 +17,13 @@ oauthTest.config(function ($sceDelegateProvider) {
 
 oauthTest.controller('MainController', function ($scope, $http, $sessionStorage, $sce, $location, $window, $q, AlertingService) {
 
-    var readKeycloakConfig = function (callback) {
+    var readKeycloakConfigFromFile = function (callback) {
 
         $http.get('keycloak.json').success(function (data) {
             callback(data);
         });
     };
-
+    
     var setDataToScope = function (config) {
         if (!$sessionStorage.client_id)
             $scope.client_id = config.resource;
@@ -46,8 +46,8 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     var init = function () {
 
 
-        readKeycloakConfig(setDataToScope);
-
+        readKeycloakConfigFromFile(setDataToScope);
+        
         $scope.authorizationCode = $location.absUrl().split('code=')[1];
         if ($scope.authorizationCode !== undefined) {
             //$scope.addAlert('success', 'New Authorzation Code available');
@@ -82,8 +82,8 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     init();
 
     $scope.getTokenFromCode = function () {
-        var code_endpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/access/codes';
-        var params = 'code=' + $scope.authorizationCode + '&redirect_uri=' + $scope.redirect_uri;
+        var code_endpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/token';
+        var params = 'grant_type=authorization_code&code=' + $scope.authorizationCode + '&redirect_uri=' + $scope.redirect_uri;
         if ($scope.authorizationCode === '') {
             this.addAlert('warning', 'Authorization Code not available');
         }
@@ -129,6 +129,15 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
                     .replace(jsonLine, library.json.replacer);
         }
     };
+    
+    
+    $scope.loadFromJson = function (){
+      if($scope.jsonvalues){
+          
+          var str = JSON.stringify(eval('('+$scope.jsonvalues+')'));
+          setDataToScope(JSON.parse(str));
+      };
+    };
 
     $scope.displayResult = function (data) {
         $scope.testResult = JSON.stringify(data, null, 4);
@@ -171,8 +180,8 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
 
     $scope.refreshToken = function () {
 
-        $http.post($scope.server + '/realms/' + $scope.realm + '/tokens/refresh',
-                'refresh_token=' + $scope.refresh_token,
+        $http.post($scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/token',
+                'grant_type=refresh_token&refresh_token=' + $scope.refresh_token,
                 {'headers': {
                         'Authorization': getBasicKey(),
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -202,7 +211,7 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     $scope.getAuthorizationCode = function () {
-        var loginEndpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/login';
+        var loginEndpoint = $scope.server + '/realms/' + $scope.realm + '/protocol/openid-connect/auth';
 
         this.saveValues().then(function () {
             $scope.loginLink = loginEndpoint + '?client_id=' + $scope.client_id + '&redirect_uri=' + $scope.redirect_uri + '&response_type=code';
