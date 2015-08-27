@@ -165,9 +165,15 @@ oauthTest.controller('MainController', function ($scope, $http, $sessionStorage,
     };
 
     $scope.testToken = function () {
-        $http.get($scope.service,{'headers': {
+        
+        var req = {
+            method: $scope.methodType,
+            url: $scope.service,
+            headers: {
                         'Authorization': getBearerKey()
-                     }})
+                     }
+        }
+        $http(req)
                 .success(function (data, status) {
                     $scope.addAlert('success', 'Successful service test (' + status + ')');
 

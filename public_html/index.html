@@ -49,6 +49,12 @@
                 <label for="service">Web service</label>
                 <input type="text" ng-model="service" id="service">
                 <button class='btn btn-sm' style='margin-left:3px;' ng-click="testToken()">Test</button>
+                <select ng-model="methodType">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                </select>
             </div>
 
             <button class='btn btn-primary' ng-click="saveValues()">Save</button>
